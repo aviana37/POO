@@ -12,7 +12,7 @@ public class Data
 		this.ano = ano;
 	}
 	
-	public String ToString()
+	public String toString()
 	{
 		return dia + "/" + mes + "/" + ano;
 	}

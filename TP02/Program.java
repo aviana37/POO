@@ -8,6 +8,7 @@ class DataManager
 	private List <Produto> Produtos;
 	private List <Servico> Servicos;
 	private Scanner s;
+	private String temp;
 	
 	public DataManager(Scanner scanner)
 	{
@@ -22,7 +23,8 @@ class DataManager
 		String name, cpf, email;
 		Data today;
 		Endereco address;
-		
+
+		temp = s.nextLine();
 		System.out.print("--CADASTRAR USUARIO--\nEntre com o nome do usuario: ");
 		name = s.nextLine();
 		
@@ -46,11 +48,13 @@ class DataManager
 
 		System.out.println("Entre com o endereco do usuario: ");
 		{
+			temp = s.nextLine();
 			System.out.print("Rua: ");
 			String street = s.nextLine();
 			System.out.print("Numero: ");
 			int number = s.nextInt();
 			System.out.print("Complemento: ");
+			temp = s.nextLine();
 			String apt = s.nextLine();
 			System.out.print("Bairro: ");
 			String district = s.nextLine();
@@ -71,6 +75,7 @@ class DataManager
 	
 	public void cadastrarProduto()
 	{
+	  temp = s.nextLine();
 	  System.out.print("--CADASTRAR PRODUTO--\nEntre com o título do produto: ");
 	  String titulo = s.nextLine();
 	  
@@ -83,6 +88,7 @@ class DataManager
 	  System.out.print("Entre com valor de venda: ");
 	  float valor = s.nextFloat();
 	  
+	  temp = s.nextLine();
 	  System.out.print("O produto é novo? s/n ");
 	  char op = s.nextLine().charAt(0);
 	  boolean novo;
@@ -107,6 +113,7 @@ class DataManager
 	
 	public void cadastrarServico()
 	{
+		temp = s.nextLine();
 		System.out.print("--CADASTRAR SERVIÇO--\nEntre com o título do produto: ");
 		String titulo = s.nextLine();
 		  
@@ -137,15 +144,37 @@ class DataManager
 		Servicos.add(serv);
 		System.out.println("Serviço cadastrado com sucesso:\n" + serv);
 	}
+	
 	public boolean isUsuariosEmpty(){return Usuarios.isEmpty();}
 	public boolean isProdutosEmpty(){return Produtos.isEmpty();}
 	public boolean isServicosEmpty(){return Servicos.isEmpty();}
 	public int usuariosSize(){return Usuarios.size();}
 	public int produtosSize(){return Produtos.size();}
 	public int servicosSize(){return Servicos.size();}
-	public void exibirUsuarios(){}
+	
+	public void exibirUsuarios()
+	{
+		if(isUsuariosEmpty())
+		{
+			System.out.println("Nao ha nenhum usuario cadastrado.");
+			return;
+		}
+		System.out.println("---USUARIOS CADASTRADOS---");
+		for(Usuario u : Usuarios)
+		{
+			System.out.println(u);
+			System.out.println();
+		}
+	}
+	
 	public void exibirProdutos()
 	{
+		if(isProdutosEmpty())
+		{
+			System.out.println("Nao ha nenhum produto cadastrado.");
+			return;
+		}
+		
 		System.out.println("---ANUNCIOS DE PRODUTOS---");
 		for(Produto p : Produtos)
 		{
@@ -154,6 +183,12 @@ class DataManager
 	}
 	public void exibirServicos()
 	{
+		if(isServicosEmpty())
+		{
+			System.out.println("Nao ha nenhum servico cadastrado.");
+			return;
+		}
+		
 		System.out.println("---ANUNCIOS DE SERVICOS---");
 		for(Servico s : Servicos)
 		{
@@ -253,6 +288,11 @@ class DataManager
 		
 		else System.out.println("Opcao invalida!");
 	}
+
+	public void mostraRelatorio()
+	{
+
+	}
 	
 }
 class Program
@@ -280,7 +320,7 @@ class Program
 					System.out.print("\n4 - Exibir Relatórios");
 				}
 				
-				System.out.print("\n0 - Sair.");
+				System.out.print("\n0 - Sair.\n");
 				
 				op = s.nextInt();
 			
@@ -321,7 +361,14 @@ class Program
 				}
 				else if (op == 4) //Exibir relatorios
 				{
-					if (!l.isUsuariosEmpty()) {}
+					if (!l.isUsuariosEmpty())
+					{
+						System.out.println("Nenhum usuario cadastrado!");
+					}
+					else
+					{
+						l.mostraRelatorio();
+					}
 				}
 				
 				else if (op == 5) //Exibir Anuncios
