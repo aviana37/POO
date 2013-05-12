@@ -79,7 +79,7 @@ class Servico extends Anuncio
 	public String toString()
 	{
 		return "Titulo: " + titulo + "\tID: " + id + "\tAnunciante: " + user_id + "\nDescricao: " + descricao 
-				+ "\nPreco: R$" + valor + "\tData inicial: " + comeco +  "\tData termino" + fim;
+				+ "\nPreco: R$" + valor + "\tData inicial: " + comeco +  "\tData termino: " + fim;
 	}
 	public void adicionarComprador(int comprador)
 	{

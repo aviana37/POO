@@ -33,6 +33,7 @@ class DataManager
 		System.out.print("Entre com o email do usuario: ");
 		email = s.nextLine();
 
+		do{
 		System.out.println("Entre com a data de hoje: ");
 		{
 			System.out.print("Dia: ");
@@ -43,8 +44,9 @@ class DataManager
 			int year = s.nextInt();
 
 			today = new Data(day, month, year);
-		}
-
+		}}
+		while (!Data.IsValid(today));
+		
 		System.out.println("Entre com o endereco do usuario: ");
 		{
 			s.nextLine();
@@ -68,7 +70,7 @@ class DataManager
 		}
 
 		Usuario usr = new Usuario(name, cpf, email, today, address);
-		System.out.println("Usuario cadastrado com sucesso:\n" + usr);
+		System.out.println("\n------\nUsuario cadastrado com sucesso:\n" + usr + "\n");
 		Usuarios.add(usr);
 	}
 	
@@ -112,7 +114,7 @@ class DataManager
 	  
 	  Produto pr = new Produto(user_id, titulo, descricao, valor, novo, nf, garantia);
 	  Produtos.add(pr);
-	  System.out.println("Produto cadastrado com sucesso:\n" + pr);
+	  System.out.println("\n------\nProduto cadastrado com sucesso:\n" + pr + "\n");
 	}
 	
 	public void cadastrarServico()
@@ -123,7 +125,7 @@ class DataManager
 		  
 		System.out.print("Entre com a descricao do servico: ");
 		String descricao = s.nextLine();
-		int user_id;	
+		int user_id, diaI, mesI, anoI, diaF, mesF, anoF;
 		do
 		{
 			System.out.print("Entre com o id do anunciante: ");
@@ -134,24 +136,28 @@ class DataManager
 
 		System.out.print("Entre com valor de venda: ");
 		float valor = s.nextFloat();
-		  
-		System.out.print("Entre com a data inicial:\nDia: ");
-		int diaI = s.nextInt();
-		System.out.print("Mes: ");
-		int mesI = s.nextInt();
-		System.out.print("Ano: ");
-		int anoI = s.nextInt();
 		
-		System.out.print("Entre com a data final:\nDia: ");
-		int diaF = s.nextInt();
+		do{
+		System.out.print("Entre com a data inicial:\nDia: ");
+		diaI = s.nextInt();
 		System.out.print("Mes: ");
-		int mesF = s.nextInt();
+		mesI = s.nextInt();
 		System.out.print("Ano: ");
-		int anoF = s.nextInt();
+		anoI = s.nextInt();
+		}while (!Data.IsValid(new Data(diaI, mesI, anoI)));
+		
+		do{
+		System.out.print("Entre com a data final:\nDia: ");
+		diaF = s.nextInt();
+		System.out.print("Mes: ");
+		mesF = s.nextInt();
+		System.out.print("Ano: ");
+		anoF = s.nextInt();
+		}while (!Data.IsValid(new Data(diaF, mesF, anoF)));
 
 		Servico serv = new Servico(user_id, titulo, descricao, valor, new Data(diaI, mesI, anoI), new Data(diaF, mesF, anoF));
 		Servicos.add(serv);
-		System.out.println("Servico cadastrado com sucesso:\n" + serv);
+		System.out.println("\n-------\nServico cadastrado com sucesso:\n" + serv + "\n");
 	}
 	
 	public boolean isUsuariosEmpty(){return Usuarios.isEmpty();}
@@ -210,11 +216,9 @@ class DataManager
 			System.out.println(s);
 		}
 	}
-	public void comprarAnuncio()
+	public void comprarAnuncio(int i)
 	{
-		System.out.print("---COMPRAS DE ANUNCIOS---\n1 - Comprar um produto\n2 - Comprar um servico" 
-				+ "\n0 - Voltar.");
-		int op = s.nextInt();
+		int op = i;
 		
 		if (op == 0)
 			return;
@@ -241,7 +245,7 @@ class DataManager
 			
 			for (Produto p : Produtos)
 			{
-				if (p.getId() == idP)
+				if (p.getId() == idP && p.getOwner()!= id)
 				{
 					count++;
 					System.out.print("\nProduto encontrado...");
@@ -256,6 +260,10 @@ class DataManager
 					
 					else
 						System.out.print(" Produto indisponivel.");
+				}
+				else if (p.getId() == idP && p.getOwner() == id) 
+				{
+					System.out.println(" Comprar produtos do mesmo usuário não é permitido.");
 				}
 			}
 			
@@ -285,7 +293,7 @@ class DataManager
 			
 			for (Servico p : Servicos)
 			{
-				if (p.getId() == idS)
+				if (p.getId() == idS && p.getOwner() != id)
 				{
 					count++;
 					System.out.print("\nProduto encontrado...");
@@ -294,6 +302,10 @@ class DataManager
 					p.adicionarComprador(id);
 					System.out.print(" Compra realizada com sucesso.\nServico: " + p
 										+ "\nContratado ao usuario de ID " + id + "\n");
+				}
+				else if (p.getId() == idS && p.getOwner() == id) 
+				{
+					System.out.println(" Contratar serviços do mesmo usuário não é permitido.");
 				}
 			}
 			
@@ -446,7 +458,7 @@ class Program
 						if(l.produtosSize() > 0 ||l.servicosSize() > 0)
 							System.out.print("\n3 - Realizar compras.");
 					
-					System.out.print("\n4 - Exibir Relatorios");
+					System.out.print("\n4 - Exibir Relatorios\n");
 				}
 				
 				System.out.print("\n0 - Sair.\n");
@@ -465,7 +477,7 @@ class Program
 					{
 					//Selecionar o tipo de anuncio
 					System.out.print("--CADASTRO DE ANUNCIOS--\n1 - Cadastrar um produto.\n2 - Cadastrar um servico."
-							+ "\n0 - Voltar.");
+							+ "\n0 - Voltar.\n");
 					op = s.nextInt();
 					
 					if (op == 0)
@@ -484,9 +496,39 @@ class Program
 				}
 				else if (op == 3) //Realizar Compras
 				{ 
+					System.out.print("---COMPRAS DE ANUNCIOS---");
+					
 					if (l.usuariosSize() > 1)
 						if(l.produtosSize() > 0 ||l.servicosSize() > 0)
-							l.comprarAnuncio();
+							System.out.print("\n1 - Comprar um produto\n2 - Comprar um servico");
+					
+					System.out.print("\n3 - Exibir anuncios\n0 - Voltar\n");
+					
+					op = s.nextInt();
+					
+					if (op != 3) l.comprarAnuncio(op);
+						
+					else //Exibir Anuncios
+					{
+						System.out.println("---EXIBICAO DE ANUNCIOS---\n1 - Todos.\n2 - Somente produtos.\n3 - Somente servicos."
+								+ "\n0 - Voltar.\n");
+						op = s.nextInt();
+						
+						if (op == 0)
+							op = -1;
+						
+						else if (op == 1)
+						{
+							l.exibirProdutos();
+							System.out.print("\n");
+							l.exibirServicos();
+							System.out.print("\n");
+						}
+						
+						else if (op == 2) { l.exibirProdutos(); System.out.print("\n");}
+						else if (op == 3) { l.exibirServicos(); System.out.print("\n");}
+						else System.out.println("Opcao invalida!");
+					}
 				}
 				else if (op == 4) //Exibir relatorios
 				{
@@ -496,25 +538,6 @@ class Program
 						l.mostraRelatorio();
 				}
 				
-				else if (op == 5) //Exibir Anuncios
-				{
-					System.out.println("---EXIBICAO DE ANUNCIOS---\n1 - Todos.\n2 - Somente produtos.\n3 - Somente servicos."
-							+ "\n0 - Voltar.");
-					op = s.nextInt();
-					
-					if (op == 0)
-						op = -1;
-					
-					else if (op == 1)
-					{
-						l.exibirProdutos();
-						l.exibirServicos();
-					}
-					
-					else if (op == 2) { l.exibirProdutos();}
-					else if (op == 3) { l.exibirServicos();}
-					else System.out.println("Opcao invalida!");
-				}
 				else if (op == 0) //Sair do programa
 				{}
 				
