@@ -8,7 +8,6 @@ class DataManager
 	private List <Produto> Produtos;
 	private List <Servico> Servicos;
 	private Scanner s;
-	private String temp;
 	
 	public DataManager(Scanner scanner)
 	{
@@ -24,7 +23,7 @@ class DataManager
 		Data today;
 		Endereco address;
 
-		temp = s.nextLine();
+		s.nextLine();
 		System.out.print("--CADASTRAR USUARIO--\nEntre com o nome do usuario: ");
 		name = s.nextLine();
 		
@@ -48,13 +47,13 @@ class DataManager
 
 		System.out.println("Entre com o endereco do usuario: ");
 		{
-			temp = s.nextLine();
+			s.nextLine();
 			System.out.print("Rua: ");
 			String street = s.nextLine();
 			System.out.print("Numero: ");
 			int number = s.nextInt();
 			System.out.print("Complemento: ");
-			temp = s.nextLine();
+			s.nextLine();
 			String apt = s.nextLine();
 			System.out.print("Bairro: ");
 			String district = s.nextLine();
@@ -75,20 +74,25 @@ class DataManager
 	
 	public void cadastrarProduto()
 	{
-	  temp = s.nextLine();
+	  s.nextLine();
 	  System.out.print("--CADASTRAR PRODUTO--\nEntre com o titulo do produto: ");
 	  String titulo = s.nextLine();
 	  
 	  System.out.print("Entre com a descricao do produto: ");
 	  String descricao = s.nextLine();
-	  
-	  System.out.print("Entre com o id do anunciante: ");
-	  int user_id = s.nextInt();
-	  
+	  int user_id;
+	  do
+	  {
+	  	System.out.print("Entre com o id do anunciante: ");
+	  	user_id = s.nextInt();
+		if(!isUserOnList(user_id)) System.out.println("Usuario inexistente!");
+	  }
+	  while(!isUserOnList(user_id));
+
 	  System.out.print("Entre com valor de venda: ");
 	  float valor = s.nextFloat();
 	  
-	  temp = s.nextLine();
+	  s.nextLine();
 	  System.out.print("O produto e novo? s/n ");
 	  char op = s.nextLine().charAt(0);
 	  boolean novo;
@@ -113,16 +117,21 @@ class DataManager
 	
 	public void cadastrarServico()
 	{
-		temp = s.nextLine();
+		s.nextLine();
 		System.out.print("--CADASTRAR SERVICO--\nEntre com o titulo do servico: ");
 		String titulo = s.nextLine();
 		  
 		System.out.print("Entre com a descricao do servico: ");
 		String descricao = s.nextLine();
-		
-		System.out.print("Entre com o id do anunciante: ");
-		int user_id = s.nextInt();
-		  
+		int user_id;	
+		do
+		{
+			System.out.print("Entre com o id do anunciante: ");
+			user_id = s.nextInt();
+			if(!isUserOnList(user_id)) System.out.println("Usuario inexistente!");
+		}
+		while(!isUserOnList(user_id));
+
 		System.out.print("Entre com valor de venda: ");
 		float valor = s.nextFloat();
 		  
@@ -148,6 +157,12 @@ class DataManager
 	public boolean isUsuariosEmpty(){return Usuarios.isEmpty();}
 	public boolean isProdutosEmpty(){return Produtos.isEmpty();}
 	public boolean isServicosEmpty(){return Servicos.isEmpty();}
+	public boolean isUserOnList(int ID)
+	{
+		for(Usuario u : Usuarios)
+			if(u.getID() == ID) return true;
+		return false;
+	}
 	public int usuariosSize(){return Usuarios.size();}
 	public int produtosSize(){return Produtos.size();}
 	public int servicosSize(){return Servicos.size();}
@@ -304,7 +319,7 @@ class DataManager
 							   "7. Voltar\n");
 			System.out.print("Opcao >> ");
 			option = s.nextInt();
-			temp = s.nextLine();
+			s.nextLine();
 
 			switch(option)
 			{
@@ -320,7 +335,7 @@ class DataManager
 				case 2:
 				System.out.print("Insira a ID do usuario >> ");
 				usr = s.nextInt();
-				temp = s.nextLine();
+				s.nextLine();
 
 				System.out.println("Produtos:");
 				for(Produto p : Produtos)
@@ -336,7 +351,7 @@ class DataManager
 				case 3:
 				System.out.print("Insira a ID do usuario >> ");
 				usr = s.nextInt();
-				temp = s.nextLine();
+				s.nextLine();
 
 				System.out.println("Produtos vendidos:");
 				for(Produto p : Produtos)
@@ -353,7 +368,7 @@ class DataManager
 				case 4:
 				System.out.print("Insira a ID do usuario >> ");
 				usr = s.nextInt();
-				temp = s.nextLine();
+				s.nextLine();
 
 				System.out.println("Produtos comprados:");
 				for(Produto p : Produtos)
@@ -369,7 +384,7 @@ class DataManager
 				case 5:
 				System.out.print("Insira a ID do usuario >> ");
 				usr = s.nextInt();
-				temp = s.nextLine();
+				s.nextLine();
 
 				System.out.println("Produtos anunciados pelo usuario:");
 				for(Produto p : Produtos)
@@ -393,7 +408,7 @@ class DataManager
 				case 6:
 				System.out.print("Insira a ID do usuario >> ");
 				usr = s.nextInt();
-				temp = s.nextLine();
+				s.nextLine();
 
 				for(Usuario u : Usuarios)
 					if(u.getID() == usr)
