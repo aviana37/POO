@@ -1,7 +1,7 @@
 import java.util.List;
 import java.util.ArrayList;
 
-class Anuncio
+abstract class Anuncio
 {
 	protected int    id, user_id;
 	protected String titulo, descricao;
@@ -10,6 +10,7 @@ class Anuncio
 	protected Anuncio(int id, int user_id, String titulo, String descricao, float valor)
 	{
 		this.id = id;
+		this.user_id = user_id;
 		this.titulo = titulo;
 		this.descricao = descricao;
 		this.valor = valor;
@@ -95,6 +96,12 @@ class Servico extends Anuncio
 		{
 			System.out.println("ID: " + i);
 		}
+	}
+	public boolean isComprador(int id)
+	{
+		for(int i : compradores)
+			if(i == id) return true;
+		return false;
 	}
 }
 

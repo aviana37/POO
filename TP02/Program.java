@@ -76,10 +76,10 @@ class DataManager
 	public void cadastrarProduto()
 	{
 	  temp = s.nextLine();
-	  System.out.print("--CADASTRAR PRODUTO--\nEntre com o título do produto: ");
+	  System.out.print("--CADASTRAR PRODUTO--\nEntre com o titulo do produto: ");
 	  String titulo = s.nextLine();
 	  
-	  System.out.print("Entre com a descrição do produto: ");
+	  System.out.print("Entre com a descricao do produto: ");
 	  String descricao = s.nextLine();
 	  
 	  System.out.print("Entre com o id do anunciante: ");
@@ -89,7 +89,7 @@ class DataManager
 	  float valor = s.nextFloat();
 	  
 	  temp = s.nextLine();
-	  System.out.print("O produto é novo? s/n ");
+	  System.out.print("O produto e novo? s/n ");
 	  char op = s.nextLine().charAt(0);
 	  boolean novo;
 	  if (op == 's' || op == 'S')
@@ -114,10 +114,10 @@ class DataManager
 	public void cadastrarServico()
 	{
 		temp = s.nextLine();
-		System.out.print("--CADASTRAR SERVIÇO--\nEntre com o título do produto: ");
+		System.out.print("--CADASTRAR SERVICO--\nEntre com o titulo do servico: ");
 		String titulo = s.nextLine();
 		  
-		System.out.print("Entre com a descrição do serviço: ");
+		System.out.print("Entre com a descricao do servico: ");
 		String descricao = s.nextLine();
 		
 		System.out.print("Entre com o id do anunciante: ");
@@ -128,21 +128,21 @@ class DataManager
 		  
 		System.out.print("Entre com a data inicial:\nDia: ");
 		int diaI = s.nextInt();
-		System.out.print("Mês: ");
+		System.out.print("Mes: ");
 		int mesI = s.nextInt();
 		System.out.print("Ano: ");
 		int anoI = s.nextInt();
 		
 		System.out.print("Entre com a data final:\nDia: ");
 		int diaF = s.nextInt();
-		System.out.print("Mês: ");
+		System.out.print("Mes: ");
 		int mesF = s.nextInt();
 		System.out.print("Ano: ");
 		int anoF = s.nextInt();
 
 		Servico serv = new Servico(user_id, titulo, descricao, valor, new Data(diaI, mesI, anoI), new Data(diaF, mesF, anoF));
 		Servicos.add(serv);
-		System.out.println("Serviço cadastrado com sucesso:\n" + serv);
+		System.out.println("Servico cadastrado com sucesso:\n" + serv);
 	}
 	
 	public boolean isUsuariosEmpty(){return Usuarios.isEmpty();}
@@ -291,7 +291,121 @@ class DataManager
 
 	public void mostraRelatorio()
 	{
+		int option, usr;
+		System.out.println("-- RELATORIOS --");
+		do
+		{
+			System.out.println("1. Anuncios em andamento de todos os usuarios\n" +
+							   "2. Anuncios em andamento de um usuario\n" +
+							   "3. Anuncios vendidos por um usuario\n" +
+							   "4. Anuncios comprados por um usuario\n" +
+							   "5. Balanco de negociacoes de um usuario\n" +
+							   "6. Informacoes pessoais de um usuario\n" +
+							   "7. Voltar\n");
+			System.out.print("Opcao >> ");
+			option = s.nextInt();
+			temp = s.nextLine();
 
+			switch(option)
+			{
+				case 1:
+				System.out.println("Produtos:");
+				for(Produto p : Produtos)
+					if(p.isAvailable()) System.out.println(p);
+				System.out.println("Servicos:");
+				for(Servico serv : Servicos)
+					System.out.println(serv);
+				break;
+
+				case 2:
+				System.out.print("Insira a ID do usuario >> ");
+				usr = s.nextInt();
+				temp = s.nextLine();
+
+				System.out.println("Produtos:");
+				for(Produto p : Produtos)
+					if(p.getOwner() == usr && p.isAvailable())
+						System.out.println(p);
+
+				System.out.println("Servicos:");
+				for(Servico serv : Servicos)
+					if(serv.getOwner() == usr)
+						System.out.println(serv);
+				break;
+
+				case 3:
+				System.out.print("Insira a ID do usuario >> ");
+				usr = s.nextInt();
+				temp = s.nextLine();
+
+				System.out.println("Produtos vendidos:");
+				for(Produto p : Produtos)
+					if(p.getOwner() == usr && !p.isAvailable())
+						System.out.println(p);
+
+				System.out.println("Servicos vendidos:");
+				for(Servico serv : Servicos)
+					if(serv.getOwner() == usr && serv.getCompradoresSize() > 0)
+						System.out.println(serv);
+
+				break;
+
+				case 4:
+				System.out.print("Insira a ID do usuario >> ");
+				usr = s.nextInt();
+				temp = s.nextLine();
+
+				System.out.println("Produtos comprados:");
+				for(Produto p : Produtos)
+					if(p.getComprador() == usr)
+						System.out.println(p);
+
+				System.out.println("Servicos comprados:");
+				for(Servico serv : Servicos)
+					if(serv.isComprador(usr))
+						System.out.println(serv);
+				break;
+
+				case 5:
+				System.out.print("Insira a ID do usuario >> ");
+				usr = s.nextInt();
+				temp = s.nextLine();
+
+				System.out.println("Produtos anunciados pelo usuario:");
+				for(Produto p : Produtos)
+					if(p.getOwner() == usr)
+						System.out.println(p);
+				System.out.println("Produtos adquiridos pelo usuario:");
+				for(Produto p : Produtos)
+					if(p.getComprador() == usr)
+						System.out.println(p);
+
+				System.out.println("Servicos anunciados pelo usuario:");
+				for(Servico serv : Servicos)
+					if(serv.getOwner() == usr)
+						System.out.println(serv);
+				System.out.println("Servicos adquiridos pelo usuario:");
+				for(Servico serv : Servicos)
+					if(serv.isComprador(usr))
+						System.out.println(serv);
+				break;
+
+				case 6:
+				System.out.print("Insira a ID do usuario >> ");
+				usr = s.nextInt();
+				temp = s.nextLine();
+
+				for(Usuario u : Usuarios)
+					if(u.getID() == usr)
+					{
+						System.out.println(u);
+						break;
+					}
+
+				break;
+			}
+		}
+		while(option != 7);
 	}
 	
 }
@@ -307,24 +421,24 @@ class Program
 		{
 			//Imprimir menu principal
 				System.out.print("----MENU PRINCIPAL----\n"
-						+ "\n1 - Cadastrar usuários.");
+						+ "\n1 - Cadastrar usuarios.");
 			
 				if (!l.isUsuariosEmpty())
 				{
-					System.out.print("\n2 - Cadastrar anúncios.");
+					System.out.print("\n2 - Cadastrar anuncios.");
 				
 					if (l.usuariosSize() > 1)
 						if(l.produtosSize() > 0 ||l.servicosSize() > 0)
 							System.out.print("\n3 - Realizar compras.");
 					
-					System.out.print("\n4 - Exibir Relatórios");
+					System.out.print("\n4 - Exibir Relatorios");
 				}
 				
 				System.out.print("\n0 - Sair.\n");
 				
 				op = s.nextInt();
 			
-			//Executar de acordo com o input do usuário	
+			//Executar de acordo com o input do usuario	
 				if(op == 1)//Cadastrar Usuario
 				{
 					l.cadastrarUsuario();
@@ -335,7 +449,7 @@ class Program
 					if (!l.isUsuariosEmpty())
 					{
 					//Selecionar o tipo de anuncio
-					System.out.print("--CADASTRO DE ANUNCIOS--\n1 - Cadastrar um produto.\n2 - Cadastrar um serviço."
+					System.out.print("--CADASTRO DE ANUNCIOS--\n1 - Cadastrar um produto.\n2 - Cadastrar um servico."
 							+ "\n0 - Voltar.");
 					op = s.nextInt();
 					
@@ -361,14 +475,10 @@ class Program
 				}
 				else if (op == 4) //Exibir relatorios
 				{
-					if (!l.isUsuariosEmpty())
-					{
+					if (l.isUsuariosEmpty())
 						System.out.println("Nenhum usuario cadastrado!");
-					}
 					else
-					{
 						l.mostraRelatorio();
-					}
 				}
 				
 				else if (op == 5) //Exibir Anuncios
